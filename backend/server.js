@@ -3,17 +3,15 @@ const cors = require("cors");
 const app = express();
 const port = 8080;
 
-// Enable CORS for requests from http://localhost:3000
+app.use(express.json());
 app.use(
   cors({
     origin: "http://localhost:3000",
   })
 );
 
-// Middleware to parse JSON (if needed)
 app.use(express.json());
 
-// Hardcoded blog posts
 const blogPosts = [
   {
     id: 1,
@@ -34,12 +32,10 @@ const blogPosts = [
   },
 ];
 
-// API to get list of blogs
 app.get("/blogs", (req, res) => {
   res.json(blogPosts);
 });
 
-// API to get blog details by slug
 app.get("/blogs/:slug", (req, res) => {
   const slug = req.params.slug;
   const post = blogPosts.find((blog) => blog.slug === slug);
@@ -50,7 +46,11 @@ app.get("/blogs/:slug", (req, res) => {
   }
 });
 
-// Start the server
+app.get("/count", (req, res) => {
+  console.log("Count API called");
+  res.status(200).json({ count: blogPosts.length });
+});
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
